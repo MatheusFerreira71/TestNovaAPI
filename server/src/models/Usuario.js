@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const findOneOrCreate = require('mongoose-findoneorcreate');
 
 //Criação do modelo de dados.
 const schema = mongoose.Schema({
@@ -26,6 +27,8 @@ const schema = mongoose.Schema({
         default: new Date()
     },
 });
+
+schema.plugin(findOneOrCreate);
 
 // 1° parametro: Nome do modelo
 // 2° parametro: Esquema do modelo 

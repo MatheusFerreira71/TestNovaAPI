@@ -6,13 +6,16 @@
     "start": "nodemon ./bin/www"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "mongoose": "^5.9.19",
+    "mongoose-findoneorcreate": "^1.0.3",
     "morgan": "~1.9.1"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "nodemon": "^2.0.4"
   }
 }

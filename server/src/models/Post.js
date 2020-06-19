@@ -16,11 +16,6 @@ const schema = mongoose.Schema({
     },
     banner: {
         type: String
-    },
-    createdAt: {
-        type: Date,
-        required: true,
-        dafault: new Date()
     }, 
     avaliacao: {
         type: Number,
@@ -31,7 +26,12 @@ const schema = mongoose.Schema({
         type: mongoose.ObjectId,
         ref: 'Usuario',
         required: true
-    }
+    },
+    createdAt: {
+        type: Date,
+        required: true,
+        default: new Date()
+    },
 });
 
 // 1° parametro: Nome do modelo
