@@ -5,7 +5,8 @@ module.exports = uri => {
     mongoose.connect(uri, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        useFindAndModify: false
+        useFindAndModify: false,
+        useCreateIndex: true
     });
     // Eventos para liberar algumas mensagens ao conectar e perder a conexão com o banco de dados.
     mongoose.connection.on('connected', () => console.log(`Mongoose! conectado a ${uri}`));

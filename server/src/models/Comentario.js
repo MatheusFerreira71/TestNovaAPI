@@ -19,7 +19,7 @@ const schema = mongoose.Schema({
     createdAt: {
         type: Date,
         required: true,
-        dafault: new Date()
+        default: new Date()
     }, 
     avaliacao: {
         type: Number,

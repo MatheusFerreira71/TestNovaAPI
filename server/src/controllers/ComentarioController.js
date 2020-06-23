@@ -4,7 +4,7 @@ module.exports = {
     index: async (req, res) => {
         try {
             const { postId } = req.query;
-            const comentarios = Comentario.find().where({ postId });
+            const comentarios = await Comentario.find({ postId }).populate({path: 'usuario'});
             res.json(comentarios);
         } catch (erro) {
             console.log(erro);

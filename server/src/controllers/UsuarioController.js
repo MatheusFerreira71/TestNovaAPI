@@ -3,7 +3,7 @@ const Usuario = require('../models/Usuario');
 module.exports = {
     show: async (req, res) => {
         try {
-            const id = req.params.id;
+            const { id } = req.params;
             const usuario = await Usuario.findById(id); // Encontra a usuario pelo seu id e retorna um objeto.
             if (usuario) {
               // usuario foi encontrado.

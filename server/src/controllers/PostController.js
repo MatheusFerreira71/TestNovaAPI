@@ -1,7 +1,9 @@
 const Post = require('../models/Post');
 const Tag = require('../models/Tag');
+require('../models/Categoria');
 const PostCategoria = require('../models/PostCategoria');
 const PostTag = require('../models/PostTag');
+const Comentario = require('../models/Comentario');
 
 module.exports = {
     create: async (req, res) => {
@@ -75,6 +77,8 @@ module.exports = {
             }
             await PostCategoria.deleteMany({ postId: _id });
             await PostTag.deleteMany({ postId: _id });
+            await Comentario.deleteMany({ postId: _id });
+            res.status(200).end();
         } catch (erro) {
             console.log(erro);
             // HTTP 500: Internal Server Error
@@ -88,7 +92,7 @@ module.exports = {
                 PostCategoria: await PostCategoria.find({ catId: id }).populate('postId'),
                 PostTag: await PostTag.find({ tagId: id }).populate('postId')
             }
-            const posts = collections[type]();
+            const posts = collections[type];
             res.json(posts);
         } catch (erro) {
             console.log(erro);
@@ -100,16 +104,44 @@ module.exports = {
         try {
             const { id } = req.params;
 
-            const post = Post.findById(id);
+            const post = await Post.findById(id);
             if (!post) {
                 res.status(404).end();
             }
-            const categorias = PostCategoria.find({ postId: id })
-                .populate({ populate: 'catId', select: 'titulo' });
-            const tags = PostTag.find({ postId: id })
-                .populate({ populate: 'tagId', select: 'titulo' });
+            const categorias = await PostCategoria.find({ postId: id })
+                .populate({ path: 'catId', select: 'titulo' }).select('catId');
+            const tags = await PostTag.find({ postId: id })
+                .populate({ path: 'tagId', select: 'titulo' }).select('tagId');
 
-            res.json({ ...post, ...categorias, ...tags });
+            res.json({post, categorias, tags});
+        } catch (erro) {
+            console.log(erro);
+            // HTTP 500: Internal Server Error
+            res.status(500).send(erro);
+        }
+    },
+    indexByName: async (req, res) => {
+        try {
+            const { titulo } = req.query;
+            const posts = await Post.find({ titulo: { $regex: '.*' + titulo + '.*' } });
+            res.json(posts);
+        } catch (erro) {
+            console.log(erro);
+            // HTTP 500: Internal Server Error
+            res.status(500).send(erro);
+        }
+    },
+    avaliar: async (req, res) => {
+        try {
+            const { _id } = req.body;
+            const post = await Post.findByIdAndUpdate(_id, req.body);
+            if (post) {
+                //post encontrado e atualizado
+                res.status(204).end(); // HTTP 204: No content
+              } else {
+                //Http 404: Not found.
+                res.status(404).end();
+              }
         } catch (erro) {
             console.log(erro);
             // HTTP 500: Internal Server Error
